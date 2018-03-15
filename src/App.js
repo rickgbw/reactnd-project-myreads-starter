@@ -71,9 +71,9 @@ class BooksApp extends React.Component {
                               <div className="book-top">
                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select value={book.shelf}>
                                     <option value="none" disabled>Move to...</option>
-                                    <option value="currentlyReading" defaultValue>Currently Reading</option>
+                                    <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
                                     <option value="read">Read</option>
                                     <option value="none">None</option>
@@ -100,10 +100,10 @@ class BooksApp extends React.Component {
                               <div className="book-top">
                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select value={book.shelf}>
                                     <option value="none" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead" defaultValue>Want to Read</option>
+                                    <option value="wantToRead">Want to Read</option>
                                     <option value="read">Read</option>
                                     <option value="none">None</option>
                                   </select>
@@ -128,11 +128,11 @@ class BooksApp extends React.Component {
                               <div className="book-top">
                                 <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select value={book.shelf}>
                                     <option value="none" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
-                                    <option value="read" defaultValue>Read</option>
+                                    <option value="read">Read</option>
                                     <option value="none">None</option>
                                   </select>
                                 </div>
