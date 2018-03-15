@@ -11,13 +11,21 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    books: []
+
+    currentlyReading: [],
+    wantToRead: [],
+    read: [],
+  }
   }
 
   componentDidMount() {
     BooksAPI.getAll()
       .then(books => {
-        this.setState({ books: books });
+        this.setState({
+          currentlyReading: books.filter(b => b.shelf === 'currentlyReading'),
+          wantToRead: books.filter(b => b.shelf === 'wantToRead'),
+          read: books.filter(b => b.shelf === 'read'),
+        });
       });
   }
 
@@ -57,7 +65,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       {
-                        this.state.books.filter(b => b.shelf === 'currentlyReading').map(book =>
+                        this.state.currentlyReading.map(book =>
                           <li key={book.id}>
                             <div className="book">
                               <div className="book-top">
@@ -86,7 +94,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       {
-                        this.state.books.filter(b => b.shelf === 'wantToRead').map(book =>
+                        this.state.wantToRead.map(book =>
                           <li key={book.id}>
                             <div className="book">
                               <div className="book-top">
@@ -114,7 +122,7 @@ class BooksApp extends React.Component {
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      { this.state.books.filter(b => b.shelf === 'read').map(book =>
+                      { this.state.read.map(book =>
                           <li key={book.id}>
                             <div className="book">
                               <div className="book-top">
