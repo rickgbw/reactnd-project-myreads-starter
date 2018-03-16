@@ -2,6 +2,8 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 
+import Book from './Book';
+
 class BooksApp extends React.Component {
   state = {
     /**
@@ -17,7 +19,7 @@ class BooksApp extends React.Component {
     read: [],
   }
 
-  move(e, book) {
+  move = (e, book) => {
     let oldShelf = book.shelf;
     let newShelf = e.target.value;
 
@@ -82,24 +84,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {
                         this.state.currentlyReading.map(book =>
-                          <li key={book.id}>
-                            <div className="book">
-                              <div className="book-top">
-                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
-                                <div className="book-shelf-changer">
-                                  <select value={book.shelf} onChange={e => this.move(e,book)}>
-                                    <option value="none" disabled>Move to...</option>
-                                    <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead">Want to Read</option>
-                                    <option value="read">Read</option>
-                                    <option value="none">None</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="book-title">{book.title}</div>
-                              <div className="book-authors">{book.authors[0]}</div>
-                            </div>
-                          </li>
+                          <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
                     </ol>
@@ -111,24 +96,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {
                         this.state.wantToRead.map(book =>
-                          <li key={book.id}>
-                            <div className="book">
-                              <div className="book-top">
-                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
-                                <div className="book-shelf-changer">
-                                  <select value={book.shelf} onChange={e => this.move(e,book)}>
-                                    <option value="none" disabled>Move to...</option>
-                                    <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead">Want to Read</option>
-                                    <option value="read">Read</option>
-                                    <option value="none">None</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="book-title">{book.title}</div>
-                              <div className="book-authors">${book.authors[0]}</div>
-                            </div>
-                          </li>
+                          <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
                     </ol>
@@ -139,24 +107,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       { this.state.read.map(book =>
-                          <li key={book.id}>
-                            <div className="book">
-                              <div className="book-top">
-                                <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
-                                <div className="book-shelf-changer">
-                                  <select value={book.shelf} onChange={e => this.move(e,book)}>
-                                    <option value="none" disabled>Move to...</option>
-                                    <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead">Want to Read</option>
-                                    <option value="read">Read</option>
-                                    <option value="none">None</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="book-title">{book.title}</div>
-                              <div className="book-authors">{book.authors[0]}</div>
-                            </div>
-                          </li>
+                          <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
                     </ol>
