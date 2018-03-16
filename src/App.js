@@ -17,6 +17,9 @@ class BooksApp extends React.Component {
     currentlyReading: [],
     wantToRead: [],
     read: [],
+
+    query: '',
+    results: [],
   }
 
   move = (e, book) => {
@@ -28,13 +31,41 @@ class BooksApp extends React.Component {
         book.shelf = newShelf;
 
         this.setState(prevState => {
-          return {
-            [oldShelf]: prevState[oldShelf].filter(b => b.id !== book.id),
-            [newShelf]: [...prevState[newShelf], book]
-          }
+          let obj = {};
+          if(oldShelf !== 'none')
+            obj = { [oldShelf]: prevState[oldShelf].filter(b => b.id !== book.id) };
+          if(newShelf !== 'none')
+            obj = { ...obj, [newShelf]: [...prevState[newShelf], book] };
+
+          return obj;
         });
       });
   }
+
+  handleSearch = ({ target: { value: query } }) => {
+    this.setState({ query });
+
+    if(query) {
+      BooksAPI.search(query)
+        .then(results => {
+          let shelfs = ['currentlyReading', 'wantToRead', 'read'];
+
+          results.forEach(book => {
+            book.shelf = 'none';
+            shelfs.forEach(shelf => {
+              if(this.state[shelf].find(b => b.id === book.id))
+                book.shelf = shelf;
+            });
+          });
+
+          this.setState({ results });
+        });
+    } else {
+      this.setState({
+        searchResults: []
+      });
+    }
+  };
 
   componentDidMount() {
     BooksAPI.getAll()
@@ -48,6 +79,8 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    const { currentlyReading, wantToRead, read, query, results } = this.state;
+    
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -63,12 +96,23 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <input 
+                  type="text" 
+                  placeholder="Search by title or author"
+                  value={query}
+                  onChange={this.handleSearch}
+                />
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                {
+                  results.map(book =>
+                    <Book key={book.id} book={book} onMove={this.move} />
+                  )
+                }
+              </ol>
             </div>
           </div>
         ) : (
@@ -83,7 +127,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       {
-                        this.state.currentlyReading.map(book =>
+                        currentlyReading.map(book =>
                           <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
@@ -95,7 +139,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       {
-                        this.state.wantToRead.map(book =>
+                        wantToRead.map(book =>
                           <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
@@ -106,7 +150,7 @@ class BooksApp extends React.Component {
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      { this.state.read.map(book =>
+                      { read.map(book =>
                           <Book key={book.id} book={book} onMove={this.move} />
                         )
                       }
