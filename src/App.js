@@ -2,10 +2,10 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import escapeRegExp from 'escape-string-regexp';
-import classNames from 'classnames';
 import './App.css'
 
 import Book from './Book';
+import Shelf from './Shelf';
 
 class BooksApp extends React.Component {
   state = {
@@ -13,9 +13,6 @@ class BooksApp extends React.Component {
     currentlyReading: [],
     wantToRead: [],
     read: [],
-    showCurrentlyReading: true,
-    showWantToRead: true,
-    showRead: true,
     query: '',
     results: [],
   }
@@ -88,9 +85,6 @@ class BooksApp extends React.Component {
       read, 
       query, 
       results,
-      showCurrentlyReading,
-      showWantToRead,
-      showRead,
     } = this.state;
     const match = new RegExp(escapeRegExp(filter), 'i');
 
@@ -142,78 +136,9 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <div className="bookshelf">
-                    <div 
-                      className="bookshelf-header"
-                      onClick={() => this.setState({ showCurrentlyReading: !showCurrentlyReading })}
-                    >
-                      <h2 className="bookshelf-title">Currently Reading</h2>
-                      <div
-                        className={classNames('hamburger-shelf', { 'open-shelf': !showCurrentlyReading, 'close-shelf': showCurrentlyReading })}
-                      ></div>
-                    </div>
-                    <div 
-                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showCurrentlyReading })}
-                    >
-                      <ol className="books-grid">
-                        {
-                          currentlyReading
-                            .filter(book => match.test(book.title))
-                            .map(book =>
-                              <Book key={book.id} book={book} onMove={this.move} />
-                            )
-                        }
-                      </ol>
-                    </div>
-                  </div>
-                  <div className="bookshelf">
-                    <div 
-                      className="bookshelf-header"
-                      onClick={() => this.setState({ showWantToRead: !showWantToRead })}
-                    >
-                      <h2 className="bookshelf-title">Want to Read</h2>
-                      <div
-                        className={classNames('hamburger-shelf', { 'open-shelf': !showWantToRead, 'close-shelf': showWantToRead })}
-                      ></div>
-                    </div>
-                    <div 
-                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showWantToRead })}
-                    >
-                      <ol className="books-grid">
-                        {
-                          wantToRead
-                            .filter(book => match.test(book.title))
-                            .map(book =>
-                              <Book key={book.id} book={book} onMove={this.move} />
-                            )
-                        }
-                      </ol>
-                    </div>
-                  </div>
-                  <div className="bookshelf">
-                    <div 
-                      className="bookshelf-header"
-                      onClick={() => this.setState({ showRead: !showRead })}
-                    >
-                      <h2 className="bookshelf-title">Read</h2>
-                      <div
-                        className={classNames('hamburger-shelf', { 'open-shelf': !showRead, 'close-shelf': showRead })}
-                      ></div>
-                    </div>
-                    <div 
-                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showRead })}
-                    >
-                      <ol className="books-grid">
-                        { 
-                          read
-                            .filter(book => match.test(book.title))
-                            .map(book =>
-                              <Book key={book.id} book={book} onMove={this.move} />
-                            )
-                        }
-                      </ol>
-                    </div>
-                  </div>
+                  <Shelf title="Currently Reading" books={currentlyReading} match={match} />
+                  <Shelf title="Want to Read" books={wantToRead} match={match} />
+                  <Shelf title="Read" books={read} match={match} />
                 </div>
               </div>
               <div className="open-search">
