@@ -42,26 +42,31 @@ class BooksApp extends React.Component {
   }
 
   handleSearch = ({ target: { value: query } }) => {
-    this.setState({ query });
+    if(query.trim()) {
+      this.setState({ query });
 
-    if(query) {
       BooksAPI.search(query)
         .then(results => {
-          let shelfs = ['currentlyReading', 'wantToRead', 'read'];
+          //process results only if typed query still the same
+          if(query === this.state.query) {
+            let shelfs = ['currentlyReading', 'wantToRead', 'read'];
 
-          results.forEach(book => {
-            book.shelf = 'none';
-            shelfs.forEach(shelf => {
-              if(this.state[shelf].find(b => b.id === book.id))
-                book.shelf = shelf;
+            results.forEach(book => {
+              book.shelf = 'none';
+              shelfs.forEach(shelf => {
+                if(this.state[shelf].find(b => b.id === book.id))
+                  book.shelf = shelf;
+              });
             });
-          });
-
-          this.setState({ results });
-        });
+          
+            this.setState({ results });
+          }
+        })
+        .catch(err => console.log(err));;
     } else {
       this.setState({
-        searchResults: []
+        query,
+        results: []
       });
     }
   };
