@@ -1,12 +1,14 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import escapeRegExp from 'escape-string-regexp';
 import './App.css'
 
 import Book from './Book';
 
 class BooksApp extends React.Component {
   state = {
+    filter: '',
     currentlyReading: [],
     wantToRead: [],
     read: [],
@@ -32,6 +34,10 @@ class BooksApp extends React.Component {
           return obj;
         });
       });
+  }
+
+  handleFilter = ({ target: { value: filter } }) => {
+    this.setState({ filter });
   }
 
   handleSearch = ({ target: { value: query } }) => {
@@ -71,8 +77,9 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    const { currentlyReading, wantToRead, read, query, results } = this.state;
-    
+    const { filter, currentlyReading, wantToRead, read, query, results } = this.state;
+    const match = new RegExp(escapeRegExp(filter), 'i');
+
     return (
       <Router>
         <div className="app">
@@ -106,6 +113,19 @@ class BooksApp extends React.Component {
               <div className="list-books-title">
                 <h1>MyReads</h1>
               </div>
+              <div 
+                className="search-books-bar"
+                style={{ position: 'static' }}
+              >
+                <div className="search-books-input-wrapper">
+                  <input 
+                    type="text" 
+                    placeholder="Filter by title"
+                    value={filter}
+                    onChange={this.handleFilter}
+                  />
+                </div>
+              </div>
               <div className="list-books-content">
                 <div>
                   <div className="bookshelf">
@@ -113,9 +133,11 @@ class BooksApp extends React.Component {
                     <div className="bookshelf-books">
                       <ol className="books-grid">
                         {
-                          currentlyReading.map(book =>
-                            <Book key={book.id} book={book} onMove={this.move} />
-                          )
+                          currentlyReading
+                            .filter(book => match.test(book.title))
+                            .map(book =>
+                              <Book key={book.id} book={book} onMove={this.move} />
+                            )
                         }
                       </ol>
                     </div>
@@ -125,9 +147,11 @@ class BooksApp extends React.Component {
                     <div className="bookshelf-books">
                       <ol className="books-grid">
                         {
-                          wantToRead.map(book =>
-                            <Book key={book.id} book={book} onMove={this.move} />
-                          )
+                          wantToRead
+                            .filter(book => match.test(book.title))
+                            .map(book =>
+                              <Book key={book.id} book={book} onMove={this.move} />
+                            )
                         }
                       </ol>
                     </div>
@@ -136,9 +160,12 @@ class BooksApp extends React.Component {
                     <h2 className="bookshelf-title">Read</h2>
                     <div className="bookshelf-books">
                       <ol className="books-grid">
-                        { read.map(book =>
-                            <Book key={book.id} book={book} onMove={this.move} />
-                          )
+                        { 
+                          read
+                            .filter(book => match.test(book.title))
+                            .map(book =>
+                              <Book key={book.id} book={book} onMove={this.move} />
+                            )
                         }
                       </ol>
                     </div>
