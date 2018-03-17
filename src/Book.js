@@ -5,7 +5,10 @@ const Book = props => {
         <li>
             <div className="book">
             <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${props.book.imageLinks.thumbnail}")` }}></div>
+                {
+                    props.book.imageLinks &&
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${props.book.imageLinks.thumbnail}")` }}></div>
+                }
                 <div className="book-shelf-changer">
                 <select value={props.book.shelf} onChange={e => props.onMove(e,props.book)}>
                     <option value="" disabled>Move to...</option>
