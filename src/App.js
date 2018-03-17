@@ -2,6 +2,7 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import escapeRegExp from 'escape-string-regexp';
+import classNames from 'classnames';
 import './App.css'
 
 import Book from './Book';
@@ -12,6 +13,9 @@ class BooksApp extends React.Component {
     currentlyReading: [],
     wantToRead: [],
     read: [],
+    showCurrentlyReading: true,
+    showWantToRead: true,
+    showRead: true,
     query: '',
     results: [],
   }
@@ -77,7 +81,17 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    const { filter, currentlyReading, wantToRead, read, query, results } = this.state;
+    const { 
+      filter, 
+      currentlyReading, 
+      wantToRead, 
+      read, 
+      query, 
+      results,
+      showCurrentlyReading,
+      showWantToRead,
+      showRead,
+    } = this.state;
     const match = new RegExp(escapeRegExp(filter), 'i');
 
     return (
@@ -129,8 +143,18 @@ class BooksApp extends React.Component {
               <div className="list-books-content">
                 <div>
                   <div className="bookshelf">
-                    <h2 className="bookshelf-title">Currently Reading</h2>
-                    <div className="bookshelf-books">
+                    <div 
+                      className="bookshelf-header"
+                      onClick={() => this.setState({ showCurrentlyReading: !showCurrentlyReading })}
+                    >
+                      <h2 className="bookshelf-title">Currently Reading</h2>
+                      <div
+                        className={classNames('hamburger-shelf', { 'open-shelf': !showCurrentlyReading, 'close-shelf': showCurrentlyReading })}
+                      ></div>
+                    </div>
+                    <div 
+                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showCurrentlyReading })}
+                    >
                       <ol className="books-grid">
                         {
                           currentlyReading
@@ -143,8 +167,18 @@ class BooksApp extends React.Component {
                     </div>
                   </div>
                   <div className="bookshelf">
-                    <h2 className="bookshelf-title">Want to Read</h2>
-                    <div className="bookshelf-books">
+                    <div 
+                      className="bookshelf-header"
+                      onClick={() => this.setState({ showWantToRead: !showWantToRead })}
+                    >
+                      <h2 className="bookshelf-title">Want to Read</h2>
+                      <div
+                        className={classNames('hamburger-shelf', { 'open-shelf': !showWantToRead, 'close-shelf': showWantToRead })}
+                      ></div>
+                    </div>
+                    <div 
+                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showWantToRead })}
+                    >
                       <ol className="books-grid">
                         {
                           wantToRead
@@ -157,8 +191,18 @@ class BooksApp extends React.Component {
                     </div>
                   </div>
                   <div className="bookshelf">
-                    <h2 className="bookshelf-title">Read</h2>
-                    <div className="bookshelf-books">
+                    <div 
+                      className="bookshelf-header"
+                      onClick={() => this.setState({ showRead: !showRead })}
+                    >
+                      <h2 className="bookshelf-title">Read</h2>
+                      <div
+                        className={classNames('hamburger-shelf', { 'open-shelf': !showRead, 'close-shelf': showRead })}
+                      ></div>
+                    </div>
+                    <div 
+                      className={classNames('bookshelf-books', { 'bookshelf-books-close': !showRead })}
+                    >
                       <ol className="books-grid">
                         { 
                           read
