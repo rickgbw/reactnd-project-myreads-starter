@@ -15,6 +15,7 @@ class BooksApp extends React.Component {
     read: [],
     query: '',
     results: [],
+    error: false
   }
 
   move = (e, book) => {
@@ -47,22 +48,25 @@ class BooksApp extends React.Component {
 
       BooksAPI.search(query)
         .then(results => {
-          //process results only if typed query still the same
-          if(query === this.state.query) {
-            let shelfs = ['currentlyReading', 'wantToRead', 'read'];
+          if(!results.error) {
+            //process results only if typed query still the same
+            if(query === this.state.query) {
+              let shelfs = ['currentlyReading', 'wantToRead', 'read'];
 
-            results.forEach(book => {
-              book.shelf = 'none';
-              shelfs.forEach(shelf => {
-                if(this.state[shelf].find(b => b.id === book.id))
-                  book.shelf = shelf;
+              results.forEach(book => {
+                book.shelf = 'none';
+                shelfs.forEach(shelf => {
+                  if(this.state[shelf].find(b => b.id === book.id))
+                    book.shelf = shelf;
+                });
               });
-            });
-          
-            this.setState({ results });
-          }
+            
+              this.setState({ results, error: false });
+            }
+          } else
+            this.setState({ error: results.error });
         })
-        .catch(err => console.log(err));;
+        .catch(err => this.setState({ error: err }));
     } else {
       this.setState({
         query,
@@ -110,13 +114,18 @@ class BooksApp extends React.Component {
                 </div>
               </div>
               <div className="search-books-results">
-                <ol className="books-grid">
-                  {
-                    results.map(book =>
-                      <Book key={book.id} book={book} onMove={this.move} />
-                    )
-                  }
-                </ol>
+                { !this.state.error
+                  ?
+                  <ol className="books-grid">
+                    {
+                      results.map(book =>
+                        <Book key={book.id} book={book} onMove={this.move} />
+                      )
+                    }
+                  </ol>
+                  :
+                  <strong>Error: {this.state.error}</strong>
+                }
               </div>
             </div>
           )}/>
@@ -141,9 +150,24 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <Shelf title="Currently Reading" books={currentlyReading} match={match} />
-                  <Shelf title="Want to Read" books={wantToRead} match={match} />
-                  <Shelf title="Read" books={read} match={match} />
+                  <Shelf 
+                    title="Currently Reading" 
+                    books={currentlyReading} 
+                    match={match} 
+                    onMove={this.move}
+                  />
+                  <Shelf 
+                    title="Want to Read" 
+                    books={wantToRead} 
+                    match={match} 
+                    onMove={this.move}
+                  />
+                  <Shelf 
+                    title="Read" 
+                    books={read} 
+                    match={match} 
+                    onMove={this.move}
+                  />
                 </div>
               </div>
               <div className="open-search">

@@ -27,7 +27,7 @@ class Shelf extends React.Component {
                         this.props.books
                         .filter(book => this.props.match.test(book.title))
                         .map(book =>
-                            <Book key={book.id} book={book} onMove={this.move} />
+                            <Book key={book.id} book={book} onMove={this.props.onMove} />
                         )
                     }
                     </ol>
