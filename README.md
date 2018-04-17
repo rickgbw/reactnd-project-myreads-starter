@@ -2,6 +2,9 @@
 
 This project manages a list of Books, classifing them in 3 sections (also called Bookshelfs). You can move books over the sections, remove them or search for new books.
 
+![home](https://user-images.githubusercontent.com/924158/38896791-19421738-426a-11e8-823a-930c45ec3c7a.png)
+
+
 ## Installation
 
 Clone the repo and type the following command on project folder:
@@ -19,7 +22,7 @@ Now you can browse this project on: http://localhost:3000/
 
 ## Usage
 
-At the first screen will be listed your Books, classified into: "Currently Reading", "Want To Read" and "Reading".
+At the first screen will be listed your Books, classified into: "Currently Reading", "Want To Read" and "Reading". Here are some capabilities to interact with them:
 
 ### Filter
 On the top of home screen, you're able to type anything to filter your books.
