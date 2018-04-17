@@ -22,7 +22,7 @@ Now you can browse this project on: http://localhost:3000/
 
 ## Usage
 
-At the first screen will be listed your Books, classified into: "Currently Reading", "Want To Read" and "Reading". Here are some capabilities to interact with them:
+At the first screen will be listed your Books, classified into: ***Currently Reading***, ***Want To Read*** and ***Reading***. Here are some capabilities to interact with them:
 
 ### Filter
 On the top of home screen, you're able to type anything to filter your books.
